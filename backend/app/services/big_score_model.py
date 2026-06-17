@@ -470,8 +470,58 @@ def test_england_vs_croatia_warmup():
     return result
 
 
+def test_usa_vs_paraguay():
+    """测试美国 vs 巴拉圭 — 世界杯东道主 vs 南美球队"""
+    print("\n" + "=" * 70)
+    print("【测试】美国 vs 巴拉圭 — 世界杯东道主")
+    print("=" * 70)
+    
+    model = BigScorePredictorModel()
+    
+    result = model.predict(
+        home_team='United States',
+        away_team='Paraguay',
+        home_elo=1689,           # 美国 Elo
+        away_elo=1650,           # 巴拉圭 Elo (估计)
+        match_date='2026-06-01',
+        base_lambda_home=1.5,   # 美国基础进攻
+        base_lambda_away=1.0,   # 巴拉圭基础进攻
+        tournament_start_date='2026-06-11',  # 世界杯前热身赛
+        recent_scores=[(2, 1), (1, 0), (3, 2)],  # 美国近期
+        historical_avg_goals=2.5,  # 历史场均
+        home_team_style='balanced',
+        away_team_style='defensive'
+    )
+    
+    print(f"\n检测信息:")
+    det = result['detection']
+    print(f"  激活分数: {det['activation_score']}")
+    print(f"  触发规则: {det['triggered_rules']}")
+    print(f"  建议: {det['recommendation']}")
+    print(f"  Elo 差距: {det['elo_gap']:.0f} 分")
+    
+    if result['activated']:
+        print(f"\n✅ 大比分模型已激活!")
+        print(f"\n预测结果:")
+        print(f"  xG: {result['xg']['home']} - {result['xg']['away']}")
+        print(f"  λ: {result['lambda']['home']} - {result['lambda']['away']}")
+        print(f"\n  胜负平概率:")
+        hda = result['hda_probabilities']
+        print(f"    美国胜: {hda['home_win']*100:.1f}%")
+        print(f"    平局:   {hda['draw']*100:.1f}%")
+        print(f"    巴拉圭胜: {hda['away_win']*100:.1f}%")
+        print(f"\n  Top 10 比分:")
+        for i, s in enumerate(result['top_10_scores'], 1):
+            print(f"    {i:2d}. {s['score']:>5s}  ({s['probability']:5.2f}%)")
+    else:
+        print(f"\n❌ 大比分模型未激活")
+        print(f"  原因: {result['message']}")
+    
+    return result
+
+
 if __name__ == "__main__":
-    # 运行三个测试
+    # 运行四个测试
     print("\n" + "█" * 70)
     print("█" + " " * 68 + "█")
     print("█" + "  大比分预测模型 — 独立模块测试".center(64) + "█")
@@ -481,6 +531,7 @@ if __name__ == "__main__":
     r1 = test_germany_vs_curacao()
     r2 = test_belgium_vs_egypt()
     r3 = test_england_vs_croatia_warmup()
+    r4 = test_usa_vs_paraguay()
     
     # 总结
     print("\n" + "=" * 70)
@@ -489,7 +540,8 @@ if __name__ == "__main__":
     print(f"\n德国 vs 库拉索: {'✅ 激活' if r1['activated'] else '❌ 未激活'} (分数: {r1['detection']['activation_score']})")
     print(f"比利时 vs 埃及: {'✅ 激活' if r2['activated'] else '❌ 未激活'} (分数: {r2['detection']['activation_score']})")
     print(f"英格兰 vs 克罗地亚: {'✅ 激活' if r3['activated'] else '❌ 未激活'} (分数: {r3['detection']['activation_score']})")
+    print(f"美国 vs 巴拉圭: {'✅ 激活' if r4['activated'] else '❌ 未激活'} (分数: {r4['detection']['activation_score']})")
     
-    activated_count = sum([r1['activated'], r2['activated'], r3['activated']])
-    print(f"\n总计: {activated_count}/3 场激活大比分模型")
+    activated_count = sum([r1['activated'], r2['activated'], r3['activated'], r4['activated']])
+    print(f"\n总计: {activated_count}/4 场激活大比分模型")
     print("=" * 70)
