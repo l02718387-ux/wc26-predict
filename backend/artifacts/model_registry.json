@@ -1,13 +1,13 @@
 {
-  "trained_at": "2026-06-16T21:22:29.667872+00:00",
+  "trained_at": "2026-06-17T00:18:00.839867+00:00",
   "data_fingerprint": "c823e607f86b",
   "training_rows": 11011,
   "team_type": "national",
-  "total_seconds": 15.7,
+  "total_seconds": 22.0,
   "components": {
     "dixon_coles": {
       "status": "ready",
-      "fit_seconds": 11.4,
+      "fit_seconds": 16.9,
       "required_for": [
         "full_pipeline",
         "baseline_pipeline"
@@ -22,21 +22,21 @@
     },
     "elo": {
       "status": "ready",
-      "fit_seconds": 0.4,
+      "fit_seconds": 0.3,
       "required_for": [
         "full_pipeline"
       ]
     },
     "pi_rating": {
       "status": "ready",
-      "fit_seconds": 0.7,
+      "fit_seconds": 1.0,
       "required_for": [
         "full_pipeline"
       ]
     },
     "weibull": {
       "status": "failed",
-      "fit_seconds": 1.8,
+      "fit_seconds": 2.4,
       "required_for": [
         "full_pipeline"
       ]
