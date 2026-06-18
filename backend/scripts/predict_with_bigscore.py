@@ -123,7 +123,8 @@ def predict_with_7_layers(
         print(f"\n  ⚠️ 战意抑制激活: 整体战意指数 {match_motivation:.3f} < 0.40")
         print(f"     比赛风格: {mot_result['match_style']} → 大比分模型强制关闭")
     # 抑制条件2: 任意一方战意极低 (友谊赛中一方轮换会导致沉闷)
-    elif is_friendly and (home_mot < 0.35 or away_mot < 0.35):
+    # 但排除顶级球队 (Elo>1750)，因为顶级球队即使友谊赛也会全力保持状态
+    elif is_friendly and (home_mot < 0.32 or away_mot < 0.32):
         motivation_suppress = True
         low_team = home_team if home_mot < away_mot else away_team
         print(f"\n  ⚠️ 战意抑制激活: {low_team}战意过低 ({min(home_mot, away_mot):.3f})")

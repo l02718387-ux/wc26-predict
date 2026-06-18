@@ -130,6 +130,10 @@ class MotivationIndexCalculator:
             scores['opponent_strength'] * self.config.opponent_strength_weight
         )
 
+        # 顶级球队加成: Elo>1750的顶级球队在友谊赛中战意更高 (保持状态、维护声誉)
+        if is_friendly and team_elo > 1750:
+            total_score = min(1.0, total_score + 0.12)
+
         # 确定战意等级
         level = self._determine_level(total_score)
 
@@ -153,7 +157,7 @@ class MotivationIndexCalculator:
         """积分紧迫性: 评估球队对积分的渴求程度"""
 
         if is_friendly and played == 0:
-            return 0.15  # 友谊赛且无关积分，战意很低
+            return 0.30  # 友谊赛基础战意 (保持状态、磨合阵容)
 
         if is_eliminated:
             return 0.1  # 已淘汰，战意极低
