@@ -326,11 +326,11 @@ class MediumBigScoreModel:
             triggers.append(f'近期场均合计{combined_recent_goals:.1f}>2.5')
         
         if is_warmup:
-            score += 0.2
+            score += 0.1
             triggers.append('热身赛')
         
         if is_host:
-            score += 0.15
+            score += 0.1
             triggers.append('东道主')
         
         is_likely = score >= self.config.activation_threshold
